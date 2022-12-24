@@ -40,9 +40,11 @@ print(userFuncs)
 A = gv.Digraph()
 nodes = set([])
 for module, funcs in userFuncs.items():
-    for func in funcs:
-        A.node(func)
-        nodes.add(func)
+    with A.subgraph(name="cluster_"+module) as moduleSubgraph:
+        moduleSubgraph.attr(label=module)
+        for func in funcs:
+            moduleSubgraph.node(func)
+            nodes.add(func)
 
 for module in modules:
     with open(path+"/" + module + '.py') as f:
